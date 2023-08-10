@@ -3,6 +3,10 @@ h1 {text-align: center;
     background-image: linear-gradient(to right, blue , purple);
 }
 
+h2 {
+    font-size: x-large;
+}
+
 section {font-size: x-large;
 }
 
