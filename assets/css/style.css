@@ -6,9 +6,38 @@ h1 {text-align: center;
 section {font-size: x-large;
 }
 
+
+/* Everything on the left side of the page */
+#left-page {
+    float: left;
+    width: 350px;
+}
+
+#search-box {
+    width: 200px;
+}
+
 #search-btn {
     width: 170px;
     height: 20px;
     background-color: blue;
     color: white;
+}
+
+#history {
+    font-size: large;
+    height: 400px;
+}
+
+/* Everything on the right side of the page */
+#right-page {
+    margin-left: 350px;
+    /* Set the margin to match the width of the left side */
+}
+
+#display-weather,
+#display-forecast {
+    display: block;
+    margin-top: 20px;
+    /* adjust the margin as needed */
 }

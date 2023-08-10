@@ -1,18 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather Dashboard</title>
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
+
 <body>
-    <h1 class="top-bar">Weather Dashboard</h1>
-    <section><strong>Search for a City: <br></strong></section>
-        <input type="search" name="" id=""><br><br>
-        <button id="search-btn"><strong>Search</strong></button><br><br>
-        <div>--------------------</div><br><br>
-        <div>History</div>
-    
+    <h1 id="top-bar">Weather Dashboard</h1>
+
+    <section id="left-page">
+        <div><strong>Search for a City: <br></strong></div>
+        <input type="search" id="search-box" autocomplete="on"><br>
+        <button id="search-btn"><strong>Search</strong></button>
+
+        <div id="history">
+            <h2>History:</h2>
+            <div>-----------------</div><br>
+            <ul id="history-list"></ul>
+        </div>
+    </section>
+
+    <section id="right-page">
+        <div id="display-weather">
+            <ul>
+                <li>test item</li>
+                <li>test item</li>
+                <li>test item</li>
+            </ul>
+        </div>
+        <div id="display-forecast">
+            <ul>
+                <li>test item</li>
+                <li>test item</li>
+                <li>test item</li>
+            </ul>
+        </div>
+    </section>
 </body>
+
 </html>
