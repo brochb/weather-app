@@ -1,3 +1,7 @@
+:root {
+    border-color: black;
+}
+
 h1 {text-align: center;
     color: white; 
     background-image: linear-gradient(to right, blue , purple);
@@ -15,6 +19,7 @@ section {font-size: x-large;
 #left-page {
     float: left;
     width: 350px;
+    border: 2px;
 }
 
 #search-box {
@@ -36,6 +41,7 @@ section {font-size: x-large;
 /* Everything on the right side of the page */
 #right-page {
     margin-left: 350px;
+    border: 2px;
     /* Set the margin to match the width of the left side */
 }
 
@@ -43,5 +49,22 @@ section {font-size: x-large;
 #display-forecast {
     display: block;
     margin-top: 20px;
-    /* adjust the margin as needed */
+    border: 2px;
+}
+
+#history-list button {
+    display: flex;
+    flex-direction: column;
+    width: 170px;
+    height:35px;
+    margin-left: 0px;
+    margin-top: 0px;
+    justify-content: center;
+}
+
+#history-list {
+    padding-left: 0px;
+    margin-left: 0px;
+    margin-top: 0px;
+    border: 2px;
 }

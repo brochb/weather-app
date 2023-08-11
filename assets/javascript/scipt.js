@@ -36,10 +36,10 @@ searchButton.addEventListener('click', function () {
             // Extract the required values from the geocoding response
             const lat = data[0].lat;
             const lon = data[0].lon;
-            
+
             // input extracted data into weatherAPI
             const weatherAPI = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=5fb9baa22b9c4016a10a5d9c4a88d1bd`;
-            
+
             //fetch weather API
             fetch(weatherAPI)
                 .then(response => response.json())
@@ -50,9 +50,16 @@ searchButton.addEventListener('click', function () {
                     // associate city name with the <div> id="display-weather"
                     const displayWeatherDiv = document.getElementById("display-weather");
 
+                    // prepare section for appending
+
                     // append city name as an <h2> to the <div> id="display-weather"
                     const cityNameHeading = document.createElement("h2");
                     cityNameHeading.textContent = cityName + ":";
+
+                    existingCityNameHeading = displayWeatherDiv.querySelector("h2");
+                    if (existingCityNameHeading) {
+                        existingCityNameHeading.remove();
+                    }
                     displayWeatherDiv.appendChild(cityNameHeading);
 
 
@@ -69,7 +76,8 @@ searchButton.addEventListener('click', function () {
 
     // handle local storage
     let userHistory = JSON.parse(localStorage.getItem('weather-history')) || [];
-    userHistory.push(userInput);
+    const capitalizedInput = userInput.replace(/\b\w/g, char => char.toUpperCase());
+    userHistory.push(capitalizedInput);
     if (userHistory.length > 5) userHistory.splice(0, userHistory.length - 5);
     localStorage.setItem('weather-history', JSON.stringify(userHistory));
 });
