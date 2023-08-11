@@ -6,7 +6,8 @@ This application allows you to search for a city to be presented with that citie
 
 You can see the history so you can plan your trip accordingly to find the perfect time for your special time!
 
-Simply navigate to this link to begin!
+Simply navigate to this link to begin!<br>
+https://brochb.github.io/weather-app/
 
 
 ## Mock-Up
