@@ -4,34 +4,41 @@ function createCurrentWeatherDisplay(data) {
     const displayWeatherDiv = document.getElementById("display-weather");
     const currentWeatherDiv = document.createElement("div");
     currentWeatherDiv.id = "current-weather";
-    currentWeatherDiv.innerHTML = `
-        <h2>Current Weather</h2>
-        <img src="${data.icon}" alt="Weather icon">
-        <p>Temperature: ${data.temperature}°C</p>
-        <p>Wind Speed: ${data.windSpeed} m/s</p>
-        <p>Humidity: ${data.humidity}%</p>
-    `;
+    if (data) {
+        const temperatureInFahrenheit = ((data.temperature - 273.15) * 9 / 5) + 32;
+        currentWeatherDiv.innerHTML = `
+            <h2>Current Weather</h2>
+            <img src="${data.icon}" alt="Weather icon">
+            <p>Temperature: ${temperatureInFahrenheit.toFixed(2)}°F</p>
+            <p>Wind Speed: ${data.windSpeed} m/s</p>
+            <p>Humidity: ${data.humidity}%</p>
+        `;
+    } else {
+        currentWeatherDiv.innerHTML = `
+            <h2>Current Weather</h2>
+            <p>Weather data not available</p>
+        `;
+    }}
 
-    // Remove the previous current weather display (if any)
-    const existingCurrentWeatherDiv = displayWeatherDiv.querySelector("#current-weather");
-    if (existingCurrentWeatherDiv) {
-        existingCurrentWeatherDiv.remove();
-    }
-
-    displayWeatherDiv.appendChild(currentWeatherDiv);
-}
-
-function createForecastCard(date, icon, temperature, windSpeed, humidity) {
+function createForecastCard(date, icon, temperatureInFahrenheit, windSpeed, humidity) {
     const forecastCard = document.createElement("li");
-    forecastCard.innerHTML = `
-        <button>${date}</button>
-        <img src="${icon}" alt="Weather icon">
-        <p>Temperature: ${temperature}°C</p>
-        <p>Wind Speed: ${windSpeed} m/s</p>
-        <p>Humidity: ${humidity}%</p>
-    `;
+    if (date && icon && temperatureInFahrenheit && windSpeed && humidity) {
+        forecastCard.innerHTML = `
+            <h3>${date}</h3>
+            <img src="${icon}" alt="Weather icon">
+            <p>Temperature: ${temperatureInFahrenheit.toFixed(2)}°F</p>
+            <p>Wind Speed: ${windSpeed} m/s</p>
+            <p>Humidity: ${humidity}%</p>
+        `;
+    } else {
+        forecastCard.innerHTML = `
+            <h3>Forecast</h3>
+            <p>Weather data not available</p>
+        `;
+    }
     return forecastCard;
 }
+
 
 searchButton.addEventListener('click', function () {
     const userInput = document.getElementById('search-box').value;
@@ -49,12 +56,15 @@ searchButton.addEventListener('click', function () {
                     .then(response => response.json())
                     .then(weatherData => {
                         const cityName = weatherData.city.name;
-                        const currentWeatherData = {
+                        const currentWeatherData = weatherData.list[0] ? {
                             icon: `http://openweathermap.org/img/wn/${weatherData.list[0].weather[0].icon}.png`,
                             temperature: weatherData.list[0].main.temp,
                             windSpeed: weatherData.list[0].wind.speed,
                             humidity: weatherData.list[0].main.humidity
-                        };
+                        } : null;
+
+                        currentWeatherData.temperatureInFahrenheit = ((currentWeatherData.temperature -273.15) * 9 / 5) + 32;
+
                         createCurrentWeatherDisplay(currentWeatherData);
 
                         const forecastData = weatherData.list.filter((data, index) => index % 8 === 0).slice(0, 5);
@@ -65,11 +75,11 @@ searchButton.addEventListener('click', function () {
                         forecastData.forEach(dayData => {
                             const date = dayData.dt_txt;
                             const icon = `http://openweathermap.org/img/wn/${dayData.weather[0].icon}.png`;
-                            const temperature = dayData.main.temp;
+                            const temperatureInFahrenheit = ((dayData.main.temp - 273.15) * 9 / 5) + 32;
                             const windSpeed = dayData.wind.speed;
                             const humidity = dayData.main.humidity;
 
-                            const forecastCard = createForecastCard(date, icon, temperature, windSpeed, humidity);
+                            const forecastCard = createForecastCard(date, icon, temperatureInFahrenheit, windSpeed, humidity);
                             forecastList.appendChild(forecastCard);
                         });
 
