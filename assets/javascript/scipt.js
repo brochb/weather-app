@@ -1,4 +1,5 @@
 var searchButton = document.getElementById("search-btn");
+var searchBox = document.getElementById("search-box");
 
 function createCurrentWeatherDisplay(data) {
     const displayWeatherDiv = document.getElementById("display-weather");
@@ -39,6 +40,21 @@ function createForecastCard(date, icon, temperatureInFahrenheit, windSpeed, humi
     return forecastCard;
 }
 
+function loadSearchHistory() {
+    const historyList = document.getElementById('history-list');
+    const searchHistory = JSON.parse(localStorage.getItem('weather-history')) || [];
+    historyList.innerHTML = '';
+    searchHistory.forEach(searchTerm => {
+        const historyButton = document.createElement('button');
+        historyButton.textContent = searchTerm;
+        historyButton.addEventListener('click', () => {
+            document.getElementById('search-box').value = searchTerm;
+        });
+        const listItem = document.createElement('li');
+        listItem.appendChild(historyButton);
+        historyList.appendChild(listItem);
+    });
+}
 
 searchButton.addEventListener('click', function () {
     const userInput = document.getElementById('search-box').value;
@@ -102,4 +118,18 @@ searchButton.addEventListener('click', function () {
     userHistory.push(capitalizedInput);
     if (userHistory.length > 5) userHistory.splice(0, userHistory.length - 5);
     localStorage.setItem('weather-history', JSON.stringify(userHistory));
+    loadSearchHistory()
+});
+
+searchBox.addEventListener('keyup', function (event) {
+    // Check if the Enter key (key code 13) was pressed
+    if (event.key === 'Enter' || event.keyCode === 13) {
+        // Trigger a click on the search button
+        searchButton.click();
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    // This code will run when the DOM is fully loaded
+    loadSearchHistory();
 });
