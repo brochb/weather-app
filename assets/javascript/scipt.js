@@ -49,23 +49,22 @@ searchButton.addEventListener('click', function () {
                     .then(response => response.json())
                     .then(weatherData => {
                         const cityName = weatherData.city.name;
-
                         const currentWeatherData = {
-                            icon: weatherData.list[0].weather[0].icon,
+                            icon: `http://openweathermap.org/img/wn/${weatherData.list[0].weather[0].icon}.png`,
                             temperature: weatherData.list[0].main.temp,
                             windSpeed: weatherData.list[0].wind.speed,
                             humidity: weatherData.list[0].main.humidity
                         };
                         createCurrentWeatherDisplay(currentWeatherData);
 
-                        const forecastData = weatherData.list.slice(1, 6);
+                        const forecastData = weatherData.list.filter((data, index) => index % 8 === 0).slice(0, 5);
                         const forecastList = document.getElementById("display-forecast-list");
 
                         forecastList.innerHTML = '';
 
                         forecastData.forEach(dayData => {
                             const date = dayData.dt_txt;
-                            const icon = dayData.weather[0].icon;
+                            const icon = `http://openweathermap.org/img/wn/${dayData.weather[0].icon}.png`;
                             const temperature = dayData.main.temp;
                             const windSpeed = dayData.wind.speed;
                             const humidity = dayData.main.humidity;
