@@ -14,6 +14,7 @@ function createCurrentWeatherDisplay(data) {
             <p>Wind Speed: ${data.windSpeed} m/s</p>
             <p>Humidity: ${data.humidity}%</p>
         `;
+        displayWeatherDiv.appendChild(currentWeatherDiv)
     } else {
         currentWeatherDiv.innerHTML = `
             <h2>Current Weather</h2>
@@ -123,7 +124,7 @@ searchButton.addEventListener('click', function () {
 
 searchBox.addEventListener('keyup', function (event) {
     // Check if the Enter key (key code 13) was pressed
-    if (event.key === 'Enter' || event.keyCode === 13) {
+    if (event.key === 'Enter') {
         // Trigger a click on the search button
         searchButton.click();
     }
