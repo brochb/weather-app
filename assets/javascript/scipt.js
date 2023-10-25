@@ -1,29 +1,46 @@
 var searchButton = document.getElementById("search-btn");
 
 // display history
-document.addEventListener('DOMContentLoaded', function () {
-    const historyList = document.getElementById('history-list');
-    const userHistory = JSON.parse(localStorage.getItem('weather-history')) || [];
+// Function to create the current weather display
+function createCurrentWeatherDisplay(data) {
+    const displayWeatherDiv = document.getElementById("display-weather");
+    // Create an element to display the current weather
+    const currentWeatherDiv = document.createElement("div");
+    currentWeatherDiv.id = "current-weather";
 
-    userHistory.forEach(query => {
-        const listItem = document.createElement('button');
-        const link = document.createElement('a');
-        link.href = '#';
-        // Convert query object properties to an array
-        const queryArray = Object.values(query);
-        link.textContent = queryArray.join(' ');
+    // Populate the current weather display (modify as needed)
+    currentWeatherDiv.innerHTML = `
+        <h2>Current Weather</h2>
+        <img src="${data.icon}" alt="Weather icon">
+        <p>Temperature: ${data.temperature}°C</p>
+        <p>Wind Speed: ${data.windSpeed} m/s</p>
+        <p>Humidity: ${data.humidity}%</p>
+    `;
 
-        link.addEventListener('click', function () {
-            const [value1] = queryArray;
-            document.getElementById('search-box').value = value1;
-        });
+    // Remove the previous current weather display (if any)
+    const existingCurrentWeatherDiv = displayWeatherDiv.querySelector("#current-weather");
+    if (existingCurrentWeatherDiv) {
+        existingCurrentWeatherDiv.remove();
+    }
 
-        listItem.appendChild(link);
-        historyList.appendChild(listItem);
-    });
-});
+    displayWeatherDiv.appendChild(currentWeatherDiv);
+}
 
-// cause all population to take place on search button click
+// Function to create a forecast card
+function createForecastCard(date, icon, temperature, windSpeed, humidity) {
+    const forecastCard = document.createElement("li"); // Create an <li> element
+    // Populate the forecast card (modify as needed)
+    forecastCard.innerHTML = `
+        <button>${date}</button>
+        <img src="${icon}" alt="Weather icon">
+        <p>Temperature: ${temperature}°C</p>
+        <p>Wind Speed: ${windSpeed} m/s</p>
+        <p>Humidity: ${humidity}%</p>
+    `;
+    return forecastCard;
+}
+
+// Event handler for the search button
 searchButton.addEventListener('click', function () {
     // prep fetch variables
     const userInput = document.getElementById('search-box').value;
@@ -33,42 +50,56 @@ searchButton.addEventListener('click', function () {
     fetch(geocodingAPI)
         .then(response => response.json())
         .then(data => {
-            // Extract the required values from the geocoding response
-            const lat = data[0].lat;
-            const lon = data[0].lon;
+            if (data.length > 0) {
+                // Extract the required values from the geocoding response
+                const lat = data[0].lat;
+                const lon = data[0].lon;
 
-            // input extracted data into weatherAPI
-            const weatherAPI = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=5fb9baa22b9c4016a10a5d9c4a88d1bd`;
+                // input extracted data into weatherAPI
+                const weatherAPI = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=5fb9baa22b9c4016a10a5d9c4a88d1bd`;
 
-            //fetch weather API
-            fetch(weatherAPI)
-                .then(response => response.json())
-                .then(weatherData => {
-                    // define city name
-                    const cityName = weatherData.city.name;
+                //fetch weather API
+                fetch(weatherAPI)
+                    .then(response => response.json())
+                    .then(weatherData => {
+                        // Define city name
+                        const cityName = weatherData.city.name;
 
-                    // associate city name with the <div> id="display-weather"
-                    const displayWeatherDiv = document.getElementById("display-weather");
+                        // Create and populate the current weather display
+                        const currentWeatherData = {
+                            icon: weatherData.list[0].weather[0].icon,
+                            temperature: weatherData.list[0].main.temp,
+                            windSpeed: weatherData.list[0].wind.speed,
+                            humidity: weatherData.list[0].main.humidity
+                        };
+                        createCurrentWeatherDisplay(currentWeatherData);
 
-                    // prepare section for appending
+                        // Create and populate forecast cards for the next 5 days
+                        const forecastData = weatherData.list.slice(1, 6); // Skip the first item (current weather)
+                        const forecastList = document.getElementById("display-forecast-list");
 
-                    // append city name as an <h2> to the <div> id="display-weather"
-                    const cityNameHeading = document.createElement("h2");
-                    cityNameHeading.textContent = cityName + ":";
+                        // Clear existing forecast cards
+                        forecastList.innerHTML = '';
 
-                    existingCityNameHeading = displayWeatherDiv.querySelector("h2");
-                    if (existingCityNameHeading) {
-                        existingCityNameHeading.remove();
-                    }
-                    displayWeatherDiv.appendChild(cityNameHeading);
+                        forecastData.forEach(dayData => {
+                            const date = dayData.dt_txt;
+                            const icon = dayData.weather[0].icon;
+                            const temperature = dayData.main.temp;
+                            const windSpeed = dayData.wind.speed;
+                            const humidity = dayData.main.humidity;
 
+                            const forecastCard = createForecastCard(date, icon, temperature, windSpeed, humidity);
+                            forecastList.appendChild(forecastCard);
+                        });
 
-                    console.log(weatherData);
-
-                })
-                .catch(error => {
-                    console.error(error);
-                });
+                        console.log(weatherData);
+                    })
+                    .catch(error => {
+                        console.error(error);
+                    });
+            } else {
+                console.error("City not Found");
+            }
         })
         .catch(error => {
             console.error(error);
