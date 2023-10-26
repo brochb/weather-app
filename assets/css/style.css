@@ -44,14 +44,35 @@ section {
     height: 400px;
 }
 
+#history-list {
+    padding: 0;
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+#history-list button {
+    margin: 3px;
+    text-align: left;
+    margin-left: auto;
+}
+
 /* Everything on the right side of the page */
 #right-page {
-    margin-left: 350px;
+    margin-left: 25%;
 }
 
 #display-weather {
-    text-align: center;
+    margin-left: 10%;
+    margin-right: 10%;
+    width: 80%;
+    text-align: 75%;
     margin-bottom: 3px;
+    padding: 2px;
+    border-radius: 36px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 #current-weather {
@@ -72,19 +93,4 @@ section {
     width: 15%;
     display: inline-block;
     margin: 0 2%;
-}
-
-#history-list {
-    padding: 0;
-    list-style-type: none;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-}
-
-#history-list button {
-    margin: 3px;    
-    text-align: left;
-    margin-left: auto;
 }
